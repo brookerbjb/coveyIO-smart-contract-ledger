@@ -15,6 +15,8 @@ contract CoveyLedger {
   constructor() {
     owner = msg.sender;
   }
+
+  event TradePlaced(address indexed trader,string positions,  string indexed created_at);
   
   function placeTrade(string memory positions, string memory created_at) public {
       CoveyTrade memory t = CoveyTrade({
@@ -24,6 +26,8 @@ contract CoveyLedger {
       });
       trades[msg.sender].push(t);
       totalTrades.push(t);
+
+      emit TradePlaced(msg.sender,positions,created_at);
   }
 
   function getUserTrades(address _adr) public view returns(CoveyTrade[] memory) {
