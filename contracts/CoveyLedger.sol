@@ -16,7 +16,7 @@ contract CoveyLedger {
     owner = msg.sender;
   }
 
-  event TradePlaced(address indexed trader,string positions,  string indexed created_at);
+  event TradePlaced(address indexed analyst,string positions,  string indexed created_at);
   
   function placeTrade(string memory positions, string memory created_at) public {
       CoveyTrade memory t = CoveyTrade({
