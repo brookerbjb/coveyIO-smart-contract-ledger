@@ -2,7 +2,7 @@ const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades');
 const CoveyLedger = artifacts.require('CoveyLedger');
 
 contract('CoveyLedger', async (accounts) => {
-    it('works', async () => {
+    it('deploys successfully', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
         assert(coveyLedger.address);
     });
@@ -47,7 +47,7 @@ contract('CoveyLedger', async (accounts) => {
         assert.equal(3, allTrades.length);
     });
 
-    it('upgrades without losing data', async () => {
+    it('upgrades successfully without losing data', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
 
         await coveyLedger.placeTrade('APPL:0.2,GOOGL:0.1', {
