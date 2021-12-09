@@ -1,40 +1,50 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-contract CoveyLedger {
-  struct CoveyTrade {
+import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+
+contract CoveyLedger is Initializable {
+    struct CoveyTrade {
         address trader;
         string positions;
-        string created_at;
+        uint256 created_at;
     }
 
-  mapping(address => CoveyTrade[]) trades;
-  CoveyTrade[] totalTrades;
-  address owner;
+    mapping(address => CoveyTrade[]) trades;
+    CoveyTrade[] totalTrades;
+    address owner;
 
-  constructor() {
-    owner = msg.sender;
-  }
+    function initialize() public initializer {
+        owner = msg.sender;
+    }
 
-  event TradePlaced(address indexed analyst,string positions,  string indexed created_at);
-  
-  function placeTrade(string memory positions, string memory created_at) public {
-      CoveyTrade memory t = CoveyTrade({
-          trader: msg.sender,
-          positions: positions,
-          created_at: created_at
-      });
-      trades[msg.sender].push(t);
-      totalTrades.push(t);
+    event TradePlaced(
+        address indexed analyst,
+        string positions,
+        uint256 indexed created_at
+    );
 
-      emit TradePlaced(msg.sender,positions,created_at);
-  }
+    function placeTrade(string memory positions) public {
+        CoveyTrade memory t = CoveyTrade({
+            trader: msg.sender,
+            positions: positions,
+            created_at: block.timestamp
+        });
+        trades[msg.sender].push(t);
+        totalTrades.push(t);
 
-  function getUserTrades(address _adr) public view returns(CoveyTrade[] memory) {
-      return trades[_adr];
-  }
+        emit TradePlaced(msg.sender, positions, block.timestamp);
+    }
 
-  function getAllTrades() public view returns(CoveyTrade[] memory) { 
-      return totalTrades;
-  }
+    function getUserTrades(address _adr)
+        public
+        view
+        returns (CoveyTrade[] memory)
+    {
+        return trades[_adr];
+    }
+
+    function getAllTrades() public view returns (CoveyTrade[] memory) {
+        return totalTrades;
+    }
 }
