@@ -4,47 +4,47 @@ pragma solidity >=0.4.22 <0.9.0;
 import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 
 contract CoveyLedger is Initializable {
-    struct CoveyTrade {
-        address trader;
-        string positions;
+    struct coveyContent {
+        address creator;
+        string content;
         uint256 created_at;
     }
 
-    mapping(address => CoveyTrade[]) trades;
-    CoveyTrade[] totalTrades;
+    mapping(address => coveyContent[]) data;
+    coveyContent[] allContent;
     address owner;
 
     function initialize() public initializer {
         owner = msg.sender;
     }
 
-    event TradePlaced(
-        address indexed analyst,
-        string positions,
+    event contentCreated(
+        address indexed creator,
+        string content,
         uint256 indexed created_at
     );
 
-    function placeTrade(string memory positions) public {
-        CoveyTrade memory t = CoveyTrade({
-            trader: msg.sender,
-            positions: positions,
+    function createContent(string memory content) public {
+        coveyContent memory t = coveyContent({
+            creator: msg.sender,
+            content: content,
             created_at: block.timestamp
         });
-        trades[msg.sender].push(t);
-        totalTrades.push(t);
+        data[msg.sender].push(t);
+        allContent.push(t);
 
-        emit TradePlaced(msg.sender, positions, block.timestamp);
+        emit contentCreated(msg.sender, content, block.timestamp);
     }
 
-    function getUserTrades(address _adr)
+    function getCreatorContent(address _adr)
         public
         view
-        returns (CoveyTrade[] memory)
+        returns (coveyContent[] memory)
     {
-        return trades[_adr];
+        return data[_adr];
     }
 
-    function getAllTrades() public view returns (CoveyTrade[] memory) {
-        return totalTrades;
+    function getAllContent() public view returns (coveyContent[] memory) {
+        return allContent;
     }
 }
