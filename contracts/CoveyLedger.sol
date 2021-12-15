@@ -4,14 +4,14 @@ pragma solidity >=0.4.22 <0.9.0;
 import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 
 contract CoveyLedger is Initializable {
-    struct coveyContent {
+    struct CoveyContent {
         address creator;
         string content;
         uint256 created_at;
     }
 
-    mapping(address => coveyContent[]) data;
-    coveyContent[] allContent;
+    mapping(address => CoveyContent[]) data;
+    CoveyContent[] allContent;
     address owner;
 
     function initialize() public initializer {
@@ -25,13 +25,13 @@ contract CoveyLedger is Initializable {
     );
 
     function createContent(string memory content) public {
-        coveyContent memory t = coveyContent({
+        CoveyContent memory c = CoveyContent({
             creator: msg.sender,
             content: content,
             created_at: block.timestamp
         });
-        data[msg.sender].push(t);
-        allContent.push(t);
+        data[msg.sender].push(c);
+        allContent.push(c);
 
         emit contentCreated(msg.sender, content, block.timestamp);
     }
@@ -39,12 +39,12 @@ contract CoveyLedger is Initializable {
     function getCreatorContent(address _adr)
         public
         view
-        returns (coveyContent[] memory)
+        returns (CoveyContent[] memory)
     {
         return data[_adr];
     }
 
-    function getAllContent() public view returns (coveyContent[] memory) {
+    function getAllContent() public view returns (CoveyContent[] memory) {
         return allContent;
     }
 }
