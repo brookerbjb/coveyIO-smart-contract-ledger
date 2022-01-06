@@ -24,6 +24,11 @@ contract CoveyLedger is Initializable {
         uint256 indexed created_at
     );
 
+    event AddressSwapped(
+        address indexed oldAddress,
+        address indexed newAddress
+    );
+
     function createContent(string memory content) public {
         CoveyContent memory c = CoveyContent({
             analyst: msg.sender,
@@ -46,5 +51,13 @@ contract CoveyLedger is Initializable {
 
     function getAllContent() public view returns (CoveyContent[] memory) {
         return allContent;
+    }
+
+    function swapAddress(address oldAddress, address newAddress) public {
+        require(msg.sender == oldAddress);
+        CoveyContent[] storage copyContent = analystContent[msg.sender];
+        analystContent[newAddress] = copyContent;
+
+        emit AddressSwapped(oldAddress, newAddress);
     }
 }

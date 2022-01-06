@@ -83,6 +83,16 @@ module.exports = {
             gasPrice: 100000,
             skipDryRun: true,
         },
+        skale_test: {
+            provider: () =>
+                new HDWalletProvider(
+                    process.env.PRIVATE_KEY,
+                    process.env.SKALE_TEST_ENDPOINT
+                ),
+            network_id: process.env.SKALE_TEST_CHAIN_ID,
+            gasPrice: 100000,
+            skipDryRun: true,
+        },
     },
 
     // Set default mocha options here, use special reporters etc.
