@@ -106,11 +106,16 @@ module.exports = {
         },
         matic: {
             provider: () =>
-                new HDWalletProvider(mnemonic, 'https://polygon-rpc.com/'),
+                new HDWalletProvider(
+                    process.env.PRIVATE_KEY,
+                    'https://polygon-rpc.com/'
+                ),
             network_id: 137,
             confirmations: 2,
             timeoutBlocks: 200,
             skipDryRun: true,
+            gas: 6000000,
+            gasPrice: 10000000000,
         },
     },
 
