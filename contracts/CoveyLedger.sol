@@ -53,7 +53,7 @@ contract CoveyLedger is Initializable {
         return allContent;
     }
 
-    function swapAddress(address oldAddress, address newAddress) public {
+    function AddressSwitch(address oldAddress, address newAddress) public {
         require(msg.sender == oldAddress);
         CoveyContent[] storage copyContent = analystContent[msg.sender];
         analystContent[newAddress] = copyContent;

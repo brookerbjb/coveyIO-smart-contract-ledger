@@ -103,12 +103,37 @@ contract('CoveyLedger', async (accounts) => {
             err = error;
         }
 
+        const userTrades = await coveyLedger.getAnalystContent(accounts[1]);
+        assert.equal(1, userTrades.length);
+    });
+
+    it('Allows user to swapAddress and copies all data without overriding on new content', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+        const positions = 'APPL:0.2';
+
         await coveyLedger.createContent(positions, {
-            from: accounts[1],
+            from: accounts[0],
         });
 
-        const userTrades = await coveyLedger.getAnalystContent(accounts[1]);
+        let err = null;
+
+        try {
+            await coveyLedger.swapAddress(accounts[0], accounts[2], {
+                from: accounts[0],
+            });
+        } catch (error) {
+            err = error;
+        }
+
+        let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
+        assert.equal(1, userTrades.length);
+
+        await coveyLedger.createContent(positions, {
+            from: accounts[2],
+        });
+
+        userTrades = await coveyLedger.getAnalystContent(accounts[2]);
+
         assert.equal(2, userTrades.length);
-        assert.equal(positions, userTrades[0][1]);
     });
 });
