@@ -1,0 +1,91 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x1f318DF311C567083a15a263Ec2eEbcD49b120d4",
+    "txHash": "0x8fc80db253d03e3ec7153901e38e18da098e6f3c6a38f4b2149823a4f7e3e2e7"
+  },
+  "proxies": [
+    {
+      "address": "0x587Ec5a7a3F2DE881B15776BC7aaD97AA44862Be",
+      "txHash": "0x800e85405cada0d42fe94b2b7ab4b2867530c91addc19bec00d9687948d4f6a8",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "b351ebd2c5bf1e326df3b357affdafadc9a8dce75b1e6282363b1fce6a62753e": {
+      "address": "0x7a2FfE81281cf457E999ba0C7Ca9BCAfF087d89A",
+      "txHash": "0x1337c9c0fe405ee1d88d0dce30cd81e0e15c8cba4b75ecb06d10a35ff3bf57fd",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:37"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:42"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "analystContent",
+            "type": "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:13"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "allContent",
+            "type": "t_array(t_struct(CoveyContent)57_storage)dyn_storage",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:14"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "owner",
+            "type": "t_address",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:15"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)": {
+            "label": "mapping(address => struct CoveyLedger.CoveyContent[])"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_struct(CoveyContent)57_storage)dyn_storage": {
+            "label": "struct CoveyLedger.CoveyContent[]"
+          },
+          "t_struct(CoveyContent)57_storage": {
+            "label": "struct CoveyLedger.CoveyContent",
+            "members": [
+              {
+                "label": "analyst",
+                "type": "t_address"
+              },
+              {
+                "label": "content",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "created_at",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    }
+  }
+}
