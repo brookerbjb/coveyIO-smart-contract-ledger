@@ -1,0 +1,106 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xC1Ea762a9358fF05C617F241b4ad31eB2588E413",
+    "txHash": "0x9b11947e68ce4b28be23f0e6ed1ddb6159f0599271f76a2d584b52496852839e"
+  },
+  "proxies": [
+    {
+      "address": "0x14a25FA91d4e97BFD8e5eA5370fb1f8ef2a92b13",
+      "txHash": "0xf71d36ef1d6e94af234bddf4582b05c0c59cdbaacae692517d25b8bfbbd24d6e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x45bdF59e5B018995f36652ac3c7E9aD52fc5c655",
+      "txHash": "0x90d3a46d8b06f03763097c2560115c70dd5347749376fe2f817162327c7640d3",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA558214b16A13a42273c475bB0b9588c8C91dfc2",
+      "txHash": "0x5414c20495b4f6b0ff146aae8c4f6d13a0d66a4e0e04dc5b3f2a300095adefdb",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xC93643aF734Ce80BC078643191c072bFd216468f",
+      "txHash": "0xe848466279b06259ad9c6dbadb5e43db3e1e008a32c235bedba41ee593278b48",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "01b2adede3607dd626ca8c0ee42d0bb558b4d1b07275b9cd355b88d7cfc6809d": {
+      "address": "0x9d3a95A818053b280783665ab5920366a3bcb874",
+      "txHash": "0xf557fe3daec857f385ad7bc9bd1e38cfa23395183a824793611228c0078abd44",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:37"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:42"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "analystContent",
+            "type": "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)",
+            "src": "../project:/contracts/CoveyLedger.sol:13"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "allContent",
+            "type": "t_array(t_struct(CoveyContent)57_storage)dyn_storage",
+            "src": "../project:/contracts/CoveyLedger.sol:14"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "owner",
+            "type": "t_address",
+            "src": "../project:/contracts/CoveyLedger.sol:15"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)": {
+            "label": "mapping(address => struct CoveyLedger.CoveyContent[])"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_struct(CoveyContent)57_storage)dyn_storage": {
+            "label": "struct CoveyLedger.CoveyContent[]"
+          },
+          "t_struct(CoveyContent)57_storage": {
+            "label": "struct CoveyLedger.CoveyContent",
+            "members": [
+              {
+                "label": "analyst",
+                "type": "t_address"
+              },
+              {
+                "label": "content",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "created_at",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    }
+  }
+}
