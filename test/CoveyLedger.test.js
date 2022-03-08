@@ -1,6 +1,8 @@
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades');
 const CoveyLedger = artifacts.require('CoveyLedger');
 
+// a comment
+
 contract('CoveyLedger', async (accounts) => {
     it('deploys successfully', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
