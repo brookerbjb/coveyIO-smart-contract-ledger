@@ -81,12 +81,10 @@ contract CoveyLedger is Initializable {
             delete analystContent[newAddress];
 
             for (uint256 k = 0; k < fullCopy.length; k++) {
-                analystContent[newAddress].push(fullCopy[k]);
+                analystContent[newAddress][k] = fullCopy[k];
             }
         } else {
-            for (uint256 i = 0; i < copyContent.length; i++) {
-                analystContent[newAddress].push(copyContent[i]);
-            }
+            analystContent[newAddress] = copyContent;
         }
 
         emit AddressSwapped(oldAddress, newAddress);
