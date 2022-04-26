@@ -67,7 +67,7 @@ contract('CoveyLedger', async (accounts) => {
         assert.equal(1, userTrades.length);
     });
 
-    it('Does not allow swapAddress unless sender is the old address', async () => {
+    it('Does not allow AddressSwitch unless sender is the old address', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
 
         await coveyLedger.createContent('APPL:0.2,GOOGL:0.1', {
@@ -77,7 +77,7 @@ contract('CoveyLedger', async (accounts) => {
         let err = null;
 
         try {
-            await coveyLedger.swapAddress(accounts[0], accounts[1], {
+            await coveyLedger.AddressSwitch(accounts[0], accounts[1], {
                 from: accounts[1],
             });
         } catch (error) {
@@ -87,7 +87,7 @@ contract('CoveyLedger', async (accounts) => {
         assert.ok(err instanceof Error);
     });
 
-    it('Allows user to swapAddress and copies all data', async () => {
+    it('Allows user to AddressSwitch and copies all data', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
         const positions = 'APPL:0.2';
 
@@ -98,7 +98,7 @@ contract('CoveyLedger', async (accounts) => {
         let err = null;
 
         try {
-            await coveyLedger.swapAddress(accounts[0], accounts[1], {
+            await coveyLedger.AddressSwitch(accounts[0], accounts[1], {
                 from: accounts[0],
             });
         } catch (error) {
@@ -109,9 +109,13 @@ contract('CoveyLedger', async (accounts) => {
         assert.equal(1, userTrades.length);
     });
 
-    it('Allows user to swapAddress and copies all data without overriding on new content', async () => {
+    it('Allows a partial copy to AddressSwitch when both addresses have content', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
         const positions = 'APPL:0.2';
+        const positionsTwo = 'GOOGL:0.1';
+        const positionsThree = 'NFLX:0.4';
+        const positionsFour = 'NVDA:0.1';
+        const positionsFive = 'VIN:0.2';
 
         await coveyLedger.createContent(positions, {
             from: accounts[0],
@@ -120,7 +124,31 @@ contract('CoveyLedger', async (accounts) => {
         let err = null;
 
         try {
-            await coveyLedger.swapAddress(accounts[0], accounts[2], {
+            await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
+                from: accounts[0],
+            });
+        } catch (error) {
+            err = error;
+        }
+
+        await coveyLedger.createContent(positionsTwo, {
+            from: accounts[2],
+        });
+
+        await coveyLedger.createContent(positionsThree, {
+            from: accounts[2],
+        });
+
+        await coveyLedger.createContent(positionsFour, {
+            from: accounts[0],
+        });
+
+        await coveyLedger.createContent(positionsFive, {
+            from: accounts[2],
+        });
+
+        try {
+            await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
                 from: accounts[0],
             });
         } catch (error) {
@@ -128,14 +156,6 @@ contract('CoveyLedger', async (accounts) => {
         }
 
         let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
-        assert.equal(1, userTrades.length);
-
-        await coveyLedger.createContent(positions, {
-            from: accounts[2],
-        });
-
-        userTrades = await coveyLedger.getAnalystContent(accounts[2]);
-
-        assert.equal(2, userTrades.length);
+        assert.equal(4, userTrades.length);
     });
 });

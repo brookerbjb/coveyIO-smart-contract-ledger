@@ -29,6 +29,11 @@ contract CoveyLedger is Initializable {
         address indexed newAddress
     );
 
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
     function createContent(string memory content) public {
         CoveyContent memory c = CoveyContent({
             analyst: msg.sender,
@@ -56,7 +61,33 @@ contract CoveyLedger is Initializable {
     function AddressSwitch(address oldAddress, address newAddress) public {
         require(msg.sender == oldAddress);
         CoveyContent[] storage copyContent = analystContent[msg.sender];
-        analystContent[newAddress] = copyContent;
+
+        CoveyContent[] storage newAddressContent = analystContent[newAddress];
+
+        if (newAddressContent.length > 0) {
+            CoveyContent[] memory fullCopy;
+            for (uint256 i = 0; i < copyContent.length; i++) {
+                if (
+                    copyContent[i].created_at < newAddressContent[0].created_at
+                ) {
+                    fullCopy[i] = copyContent[i];
+                }
+            }
+
+            for (uint256 j = 0; j < newAddressContent.length; j++) {
+                fullCopy[j] = newAddressContent[j];
+            }
+
+            delete analystContent[newAddress];
+
+            for (uint256 k = 0; k < fullCopy.length; k++) {
+                analystContent[newAddress].push(fullCopy[k]);
+            }
+        } else {
+            for (uint256 i = 0; i < copyContent.length; i++) {
+                analystContent[newAddress].push(copyContent[i]);
+            }
+        }
 
         emit AddressSwapped(oldAddress, newAddress);
     }
