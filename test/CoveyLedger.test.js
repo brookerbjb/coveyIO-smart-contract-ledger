@@ -123,14 +123,6 @@ contract('CoveyLedger', async (accounts) => {
 
         let err = null;
 
-        try {
-            await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
-                from: accounts[0],
-            });
-        } catch (error) {
-            err = error;
-        }
-
         await coveyLedger.createContent(positionsTwo, {
             from: accounts[2],
         });
@@ -147,15 +139,12 @@ contract('CoveyLedger', async (accounts) => {
             from: accounts[2],
         });
 
-        try {
-            await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
-                from: accounts[0],
-            });
-        } catch (error) {
-            err = error;
-        }
+        await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
+            from: accounts[0],
+        });
 
         let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
+        console.log(userTrades);
         assert.equal(4, userTrades.length);
     });
 });
