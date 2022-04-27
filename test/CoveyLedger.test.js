@@ -1,5 +1,6 @@
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades');
 const CoveyLedger = artifacts.require('CoveyLedger');
+const positionsData = require('./TestData.json');
 
 // a comment
 
@@ -109,42 +110,80 @@ contract('CoveyLedger', async (accounts) => {
         assert.equal(1, userTrades.length);
     });
 
-    it('Allows a partial copy to AddressSwitch when both addresses have content', async () => {
+    it('Does a partial copy when both addresses have content', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
-        const positions = 'APPL:0.2';
-        const positionsTwo = 'GOOGL:0.1';
-        const positionsThree = 'NFLX:0.4';
-        const positionsFour = 'NVDA:0.1';
-        const positionsFive = 'VIN:0.2';
 
-        await coveyLedger.createContent(positions, {
-            from: accounts[0],
-        });
+        const firstHalf = positionsData.slice(0, positionsData.length / 2);
+        const secondHalf = positionsData.slice(
+            positionsData.length / 2,
+            positionsData.length
+        );
 
-        let err = null;
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
 
-        await coveyLedger.createContent(positionsTwo, {
-            from: accounts[2],
-        });
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
 
-        await coveyLedger.createContent(positionsThree, {
-            from: accounts[2],
-        });
+        const copyIndexes = [];
+        firstHalf.forEach((p, idx) => copyIndexes.push(idx));
 
-        await coveyLedger.createContent(positionsFour, {
-            from: accounts[0],
-        });
-
-        await coveyLedger.createContent(positionsFive, {
-            from: accounts[2],
-        });
-
-        await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
+        await coveyLedger.AddressCopy(accounts[0], accounts[2], copyIndexes, {
             from: accounts[0],
         });
 
         let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
-        console.log(userTrades);
-        assert.equal(4, userTrades.length);
+        assert.equal(positionsData.length, userTrades.length);
+    });
+
+    it('Does not allow partial copies after first trade on new ledger', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+
+        const firstHalf = positionsData.slice(0, 10);
+        const secondHalf = positionsData.slice(10, 20);
+        const thirdHalf = positionsData.slice(20, 30);
+
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
+
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
+
+        for (let p3 in thirdHalf) {
+            await coveyLedger.createContent(thirdHalf[p3], {
+                from: accounts[0],
+            });
+        }
+
+        const copyIndexes = [21, 22, 23];
+
+        let err = null;
+
+        try {
+            await coveyLedger.AddressCopy(
+                accounts[0],
+                accounts[2],
+                copyIndexes,
+                {
+                    from: accounts[0],
+                }
+            );
+        } catch (error) {
+            err = error;
+        }
+
+        assert.ok(err instanceof Error);
     });
 });
