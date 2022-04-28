@@ -5,6 +5,7 @@
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "@openzeppelin/truffle-upgrades": "^1.11.0"
+    "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "truffle-plugin-verify": "^0.5.25"
   }
 }
