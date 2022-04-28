@@ -236,6 +236,81 @@
           }
         }
       }
+    },
+    "26601a8eff2cec949b20c962c6649254d608454f348303f2d9256c60bcbfa567": {
+      "address": "0x3cFAb59992d25C587FF094bBd6B0526A9A72D4Cb",
+      "txHash": "0x733bd49eb5b0aaae8f1e87d81d1d25314aa630422d5e4f2a29fbe1d70ac87d0e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:37"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:42"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "analystContent",
+            "type": "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:13"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "allContent",
+            "type": "t_array(t_struct(CoveyContent)57_storage)dyn_storage",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:14"
+          },
+          {
+            "contract": "CoveyLedger",
+            "label": "owner",
+            "type": "t_address",
+            "src": "..\\project:\\contracts\\CoveyLedger.sol:15"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_array(t_struct(CoveyContent)57_storage)dyn_storage)": {
+            "label": "mapping(address => struct CoveyLedger.CoveyContent[])"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_struct(CoveyContent)57_storage)dyn_storage": {
+            "label": "struct CoveyLedger.CoveyContent[]"
+          },
+          "t_struct(CoveyContent)57_storage": {
+            "label": "struct CoveyLedger.CoveyContent",
+            "members": [
+              {
+                "label": "analyst",
+                "type": "t_address"
+              },
+              {
+                "label": "content",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "created_at",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
     }
   }
 }
