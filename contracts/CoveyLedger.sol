@@ -61,27 +61,23 @@ contract CoveyLedger is Initializable {
     function AddressSwitch(address oldAddress, address newAddress) public {
         require(msg.sender == oldAddress);
         CoveyContent[] storage copyContent = analystContent[msg.sender];
-        analystContent[newAddress] = copyContent;
+
+        if (analystContent[newAddress].length > 0) {
+            CoveyContent[] memory existingLedger = analystContent[newAddress];
+            delete analystContent[newAddress];
+            for (uint256 i = 0; i < copyContent.length; i++) {
+                if (copyContent[i].created_at < existingLedger[0].created_at) {
+                    analystContent[newAddress].push(copyContent[i]);
+                }
+            }
+
+            for (uint256 j = 0; j < existingLedger.length; j++) {
+                analystContent[newAddress].push(existingLedger[j]);
+            }
+        } else {
+            analystContent[newAddress] = copyContent;
+        }
 
         emit AddressSwapped(oldAddress, newAddress);
-    }
-
-    function AddressCopy(
-        address oldAddress,
-        address newAddress,
-        uint256[] memory indexes
-    ) public {
-        require(msg.sender == oldAddress);
-
-        for (uint256 i = 0; i < indexes.length; i++) {
-            require(
-                analystContent[oldAddress][indexes[i]].created_at <
-                    analystContent[newAddress][0].created_at,
-                'Copied content cannot be after your first trade on your new ledger'
-            );
-            analystContent[newAddress].push(
-                analystContent[oldAddress][indexes[i]]
-            );
-        }
     }
 }
