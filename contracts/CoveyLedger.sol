@@ -61,7 +61,31 @@ contract CoveyLedger is Initializable {
     function AddressSwitch(address oldAddress, address newAddress) public {
         require(msg.sender == oldAddress);
         CoveyContent[] storage copyContent = analystContent[msg.sender];
-        analystContent[newAddress] = copyContent;
+
+        CoveyContent[] storage newAddressContent = analystContent[newAddress];
+
+        if (newAddressContent.length > 0) {
+            CoveyContent[] memory fullCopy;
+            for (uint256 i = 0; i < copyContent.length; i++) {
+                if (
+                    copyContent[i].created_at < newAddressContent[0].created_at
+                ) {
+                    fullCopy[i] = copyContent[i];
+                }
+            }
+
+            for (uint256 j = 0; j < newAddressContent.length; j++) {
+                fullCopy[j] = newAddressContent[j];
+            }
+
+            delete analystContent[newAddress];
+
+            for (uint256 k = 0; k < fullCopy.length; k++) {
+                analystContent[newAddress][k] = fullCopy[k];
+            }
+        } else {
+            analystContent[newAddress] = copyContent;
+        }
 
         emit AddressSwapped(oldAddress, newAddress);
     }
