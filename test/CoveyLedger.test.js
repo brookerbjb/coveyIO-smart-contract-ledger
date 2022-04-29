@@ -96,22 +96,65 @@ contract('CoveyLedger', async (accounts) => {
             from: accounts[0],
         });
 
+        await coveyLedger.AddressSwitch(accounts[0], accounts[1], {
+            from: accounts[0],
+        });
+
+        const userTrades = await coveyLedger.getAnalystContent(accounts[1]);
+        assert.equal(1, userTrades.length);
+    });
+
+    it('Does not allow user to AddressSwitch an empty ledger', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+
         let err = null;
 
         try {
             await coveyLedger.AddressSwitch(accounts[0], accounts[1], {
                 from: accounts[0],
             });
-        } catch (error) {
-            err = error;
+        } catch (e) {
+            err = e;
         }
 
-        const userTrades = await coveyLedger.getAnalystContent(accounts[1]);
-        assert.equal(1, userTrades.length);
+        assert.ok(err instanceof Error);
     });
 
-    it('Allows a partial copy to AddressSwitch when both addresses have content', async () => {
+    it('Does a partial copy when both addresses have content', async () => {
         const coveyLedger = await deployProxy(CoveyLedger);
+
+        const firstHalf = positionsData.slice(0, positionsData.length / 2);
+        const secondHalf = positionsData.slice(
+            positionsData.length / 2,
+            positionsData.length
+        );
+
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
+
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
+
+        const copyIndexes = [];
+        firstHalf.forEach((p, idx) => copyIndexes.push(idx));
+
+        await coveyLedger.AddressCopy(accounts[0], accounts[2], copyIndexes, {
+            from: accounts[0],
+        });
+
+        let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
+        assert.equal(positionsData.length, userTrades.length);
+    });
+
+    it('Does not allow partial copies after first trade on new ledger', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+
         const firstHalf = positionsData.slice(0, 10);
         const secondHalf = positionsData.slice(10, 20);
         const thirdHalf = positionsData.slice(20, 30);
@@ -134,12 +177,124 @@ contract('CoveyLedger', async (accounts) => {
             });
         }
 
+        const copyIndexes = [21, 22, 23];
+
+        let err = null;
+
+        try {
+            await coveyLedger.AddressCopy(
+                accounts[0],
+                accounts[2],
+                copyIndexes,
+                {
+                    from: accounts[0],
+                }
+            );
+        } catch (error) {
+            err = error;
+        }
+
+        assert.ok(err instanceof Error);
+    });
+
+    it('Backs up an address on AddressSwitch', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+        const firstHalf = positionsData.slice(0, 10);
+        const secondHalf = positionsData.slice(10, 20);
+
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
+
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
         await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
             from: accounts[0],
             gas: 5000000,
         });
 
+        let backupTrades = await coveyLedger.getBackupContent(accounts[2]);
+        assert.equal(secondHalf.length, backupTrades.length);
+    });
+
+    it('Restores an address', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+        const firstHalf = positionsData.slice(0, 10);
+        const secondHalf = positionsData.slice(10, 20);
+
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
+
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
+        await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
+            from: accounts[0],
+            gas: 5000000,
+        });
+
+        let backupTrades = await coveyLedger.getBackupContent(accounts[2]);
+        assert.equal(secondHalf.length, backupTrades.length);
+
+        await coveyLedger.restoreLedger(accounts[2], {
+            from: accounts[0],
+        });
+
         let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
-        assert.equal(firstHalf.length + secondHalf.length, userTrades.length);
+        assert.equal(secondHalf.length, userTrades.length);
+    });
+
+    it('Does not allow restoring a backup more than once', async () => {
+        const coveyLedger = await deployProxy(CoveyLedger);
+        const firstHalf = positionsData.slice(0, 10);
+        const secondHalf = positionsData.slice(10, 20);
+
+        for (let p in firstHalf) {
+            await coveyLedger.createContent(firstHalf[p], {
+                from: accounts[0],
+            });
+        }
+
+        for (let p2 in secondHalf) {
+            await coveyLedger.createContent(secondHalf[p2], {
+                from: accounts[2],
+            });
+        }
+        await coveyLedger.AddressSwitch(accounts[0], accounts[2], {
+            from: accounts[0],
+            gas: 5000000,
+        });
+
+        let backupTrades = await coveyLedger.getBackupContent(accounts[2]);
+        assert.equal(secondHalf.length, backupTrades.length);
+
+        await coveyLedger.restoreLedger(accounts[2], {
+            from: accounts[0],
+        });
+
+        let userTrades = await coveyLedger.getAnalystContent(accounts[2]);
+        assert.equal(secondHalf.length, userTrades.length);
+
+        let err = null;
+
+        try {
+            await coveyLedger.restoreLedger(accounts[2], {
+                from: accounts[0],
+            });
+        } catch (e) {
+            err = e;
+        }
+
+        assert.ok(err instanceof Error);
     });
 });

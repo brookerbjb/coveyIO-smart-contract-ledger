@@ -14,6 +14,8 @@ contract CoveyLedger is Initializable {
     CoveyContent[] allContent;
     address owner;
 
+    mapping(address => CoveyContent[]) backupContent;
+
     function initialize() public initializer {
         owner = msg.sender;
     }
@@ -28,6 +30,9 @@ contract CoveyLedger is Initializable {
         address indexed oldAddress,
         address indexed newAddress
     );
+
+    event LedgerBackup(address indexed analystAddress);
+    event LedgerRestored(address indexed analystAddress);
 
     modifier onlyOwner {
         require(msg.sender == owner);
@@ -60,9 +65,15 @@ contract CoveyLedger is Initializable {
 
     function AddressSwitch(address oldAddress, address newAddress) public {
         require(msg.sender == oldAddress);
+        require(
+            analystContent[msg.sender].length > 0,
+            'Cannot copy an empty ledger'
+        );
+
         CoveyContent[] storage copyContent = analystContent[msg.sender];
 
         if (analystContent[newAddress].length > 0) {
+            backupLedger(newAddress);
             CoveyContent[] memory existingLedger = analystContent[newAddress];
             delete analystContent[newAddress];
             for (uint256 i = 0; i < copyContent.length; i++) {
@@ -79,5 +90,35 @@ contract CoveyLedger is Initializable {
         }
 
         emit AddressSwapped(oldAddress, newAddress);
+    }
+
+    function backupLedger(address analystAddress) private {
+        require(analystContent[analystAddress].length > 0, 'Nothing to backup');
+
+        CoveyContent[] storage backup = analystContent[analystAddress];
+
+        backupContent[analystAddress] = backup;
+        emit LedgerBackup(analystAddress);
+    }
+
+    function restoreLedger(address analystAddress) public {
+        require(
+            backupContent[analystAddress].length > 0,
+            'No backup to restore'
+        );
+        CoveyContent[] storage backup = backupContent[analystAddress];
+        analystContent[analystAddress] = backup;
+
+        delete backupContent[analystAddress];
+
+        emit LedgerRestored(analystAddress);
+    }
+
+    function getBackupContent(address _adr)
+        public
+        view
+        returns (CoveyContent[] memory)
+    {
+        return backupContent[_adr];
     }
 }
