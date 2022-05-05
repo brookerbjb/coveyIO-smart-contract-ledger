@@ -125,7 +125,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -155,7 +156,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -222,7 +224,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\"}],\"name\":\"AddressSwapped\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"analyst\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"created_at\",\"type\":\"uint256\"}],\"name\":\"ContentCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"analystAddress\",\"type\":\"address\"}],\"name\":\"LedgerBackup\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"analystAddress\",\"type\":\"address\"}],\"name\":\"LedgerRestored\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"oldAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\"}],\"name\":\"AddressSwitch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"}],\"name\":\"createContent\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllContent\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"analyst\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"created_at\",\"type\":\"uint256\"}],\"internalType\":\"struct CoveyLedger.CoveyContent[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_adr\",\"type\":\"address\"}],\"name\":\"getAnalystContent\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"analyst\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"created_at\",\"type\":\"uint256\"}],\"internalType\":\"struct CoveyLedger.CoveyContent[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_adr\",\"type\":\"address\"}],\"name\":\"getBackupContent\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"analyst\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"created_at\",\"type\":\"uint256\"}],\"internalType\":\"struct CoveyLedger.CoveyContent[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"analystAddress\",\"type\":\"address\"}],\"name\":\"restoreLedger\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/CoveyLedger.sol\":\"CoveyLedger\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x6287586f5e4a103c89d4dda41406136cdf283cc625bd1ebfdf1468aae5bfe449\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://30e2e913292e86a9bce50d51882b23ef57ae4c811003ec96cf39b1781f68b202\",\"dweb:/ipfs/QmUXqjyiAHbEMJ4zLfaduWYuVwp1HozqVhtChe9VfdpjoV\"]},\"project:/contracts/CoveyLedger.sol\":{\"keccak256\":\"0x4cd4e72718182531f4aefbed4a4afcfbd17949bc075142295f0ecf03459f0d21\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://95168def846f17e3f7abbd696d7d59706e689d3deb23e6a71f9062d56393f404\",\"dweb:/ipfs/QmQSAygTx7S3z1wbBKW5LL6oKmwh7yAQewMDpHjGWwcGyp\"]}},\"version\":1}",
@@ -15606,16 +15609,87 @@
   },
   "networks": {
     "137": {
-      "events": {},
+      "events": {
+        "0xd8664d946c6c91d61ec58f6ab38e3c3ba8201c40c329115f516085f2211dcded": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "oldAddress",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddressSwapped",
+          "type": "event"
+        },
+        "0xc1ee072f438c5824e2a943285a6d24e3375d58914c2b632a57dfa061efce0364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "analyst",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "content",
+              "type": "string"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "created_at",
+              "type": "uint256"
+            }
+          ],
+          "name": "ContentCreated",
+          "type": "event"
+        },
+        "0x0228a34d974cfe0f3ed5fe6b9aa1656cc3bc27123eaf6e594a03df28185bf597": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "analystAddress",
+              "type": "address"
+            }
+          ],
+          "name": "LedgerBackup",
+          "type": "event"
+        },
+        "0x6558213e01f750da8ca9580890a2ea42104fa89ba8a12931c4d297f3421e94ae": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "analystAddress",
+              "type": "address"
+            }
+          ],
+          "name": "LedgerRestored",
+          "type": "event"
+        }
+      },
       "links": {},
       "address": "0x587Ec5a7a3F2DE881B15776BC7aaD97AA44862Be",
-      "transactionHash": "0x1337c9c0fe405ee1d88d0dce30cd81e0e15c8cba4b75ecb06d10a35ff3bf57fd"
+      "transactionHash": "0x5fcb17e67547a53aaf2a629ebe86c7aca7b3e6ad640921e052b18c2fde759953"
     },
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xadA3Ae1C0736c24BcBf8c16137f5913e95c06102",
-      "transactionHash": "0x8fce1de0ff92272a177d28826adb2f8c815af688cf6f1ea6d34e11fd97e1fc2c"
+      "address": "0x9563AF3AF67358F9fc8303B525D8378Eb32ACb00",
+      "transactionHash": "0x686f903d4e513d74aeedb982bd98d0b9fa389af15161d3b8dae051d18372ef84"
     },
     "80001": {
       "events": {
@@ -15662,17 +15736,43 @@
           ],
           "name": "ContentCreated",
           "type": "event"
+        },
+        "0x0228a34d974cfe0f3ed5fe6b9aa1656cc3bc27123eaf6e594a03df28185bf597": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "analystAddress",
+              "type": "address"
+            }
+          ],
+          "name": "LedgerBackup",
+          "type": "event"
+        },
+        "0x6558213e01f750da8ca9580890a2ea42104fa89ba8a12931c4d297f3421e94ae": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "analystAddress",
+              "type": "address"
+            }
+          ],
+          "name": "LedgerRestored",
+          "type": "event"
         }
       },
       "links": {},
-      "address": "0xAd995FBA14dC6A369faE3c90B81CE0346f4Cf3BC",
-      "transactionHash": "0x22261d14215371946c4dc55235b4d1297892ea7020f29761f9cc57ea38e66d0c"
+      "address": "0x41516c49a61e0cEa63E11187B08eBC181a65e56b",
+      "transactionHash": "0x40dd118821318d5e34bb39934a409393cededdec8be8026360e15dd03561b149"
     },
     "3707172096179956": {
       "events": {},
       "links": {},
       "address": "0xC93643aF734Ce80BC078643191c072bFd216468f",
-      "transactionHash": "0x1b051252f46815dd3bbe2dc2c65e9d11c9f0cce34722f14fc486a8f7484a2d46"
+      "transactionHash": "0xbf4949f48686b512a1c51b3c213726982817cb8a16c50ae4609c4c65e99110da"
     },
     "263950960672927": {
       "events": {},
@@ -15682,7 +15782,8 @@
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-04-29T15:03:11.862Z",
+  "updatedAt": "2022-04-29T15:37:12.654Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
