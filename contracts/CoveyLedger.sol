@@ -106,6 +106,11 @@ contract CoveyLedger is Initializable {
             backupContent[analystAddress].length > 0,
             'No backup to restore'
         );
+
+        require(
+            msg.sender == analystAddress,
+            'Cannot restore address other than your own'
+        );
         CoveyContent[] storage backup = backupContent[analystAddress];
         analystContent[analystAddress] = backup;
 
